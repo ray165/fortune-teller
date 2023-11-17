@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const statsRouter = require('./routes/stats');
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,7 @@ mongoose
 app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/stats', statsRouter);
 
 // Implement routes for admin and user dashboards similarly
 

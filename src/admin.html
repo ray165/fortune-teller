@@ -4,9 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #admin-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h2>Welcome to Admin Dashboard</h2>
-    <!-- Add content and functionality specific to the admin dashboard -->
+    <div id="admin-container">
+        <h1>Admin Dashboard</h1>
+
+        <h2>API Endpoint Stats</h2>
+        <table id="endpoint-stats">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th># of Requests</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically added here using JavaScript -->
+            </tbody>
+        </table>
+
+        <h2>API Usage Breakdown</h2>
+        <table id="usage-breakdown">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Token</th>
+                    <th>Total # Requests</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically added here using JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Fetch API stats when the page loads
+        window.onload = function () {
+            fetchStats();
+        };
+
+        function fetchStats() {
+            // Make an AJAX request to the server to get API stats
+            fetch('/api/v1/stats', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any necessary authentication headers
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the tables with the received data
+                updateTable('endpoint-stats', data.endpointStats);
+                updateTable('usage-breakdown', data.usageBreakdown);
+            })
+            .catch(error => {
+                console.error('Error fetching stats:', error);
+            });
+        }
+
+        function updateTable(tableId, data) {
+            const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+
+            // Clear existing data
+            tableBody.innerHTML = '';
+
+            // Populate the table with the received data
+            data.forEach(item => {
+                const row = tableBody.insertRow();
+                for (const key in item) {
+                    if (Object.hasOwnProperty.call(item, key)) {
+                        const cell = row.insertCell();
+                        cell.appendChild(document.createTextNode(item[key]));
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
