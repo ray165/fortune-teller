@@ -1,8 +1,11 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const mongoose = require('mongoose');
 require('dotenv').config();
+const path = require('path');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
 
 const app = express();
 const port = 3000;
@@ -16,35 +19,9 @@ mongoose
 		console.log('MongoDB connection is established successfully! 🎉')
 	})
 
-// Sample users for testing
-const users = [
-    { id: 1, username: 'john', password: '123' },
-    { id: 2, username: 'admin', password: '111' }
-];
-
 app.use(bodyParser.json());
-
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/src/landing.html');
-});
-
-
-// Routes for user login
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-    // Check if the user exists and the password is correct
-    const user = users.find(u => u.username === username && u.password === password);
-
-    if (user) {
-        // Set user session and send success response with redirect URL
-        const redirectURL = username === 'admin' ? '/admin_dashboard' : '/user_dashboard';
-        res.json({ success: true, redirect: redirectURL });
-    } else {
-        // Send failure response
-        res.json({ success: false });
-    }
-});
+app.use('/', indexRouter);
+app.use('/auth', authRouter);
 
 // Implement routes for admin and user dashboards similarly
 
