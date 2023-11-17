@@ -7,9 +7,7 @@ const User = require('../models/user')
 
 const {
 	createAccessToken,
-	createRefreshToken,
 	sendAccessToken,
-	sendRefreshToken,
 	createPasswordResetToken,
 } = require('../utils/tokens')
 
@@ -92,12 +90,9 @@ router.post('/login', async (req, res) => {
         }
 
         const accessToken = createAccessToken(validUser._id);
-		const refreshToken = createRefreshToken(validUser._id);
 
-        validUser.refreshtoken = refreshToken;
         await validUser.save();
 
-        sendRefreshToken(res, refreshToken);
 		sendAccessToken(req, res, accessToken);
 
     } catch (err) {
@@ -108,4 +103,11 @@ router.post('/login', async (req, res) => {
             err,
         });
     }
+});
+
+router.post('/logout', async (req, res) => {
+    return res.json({
+		message: 'Logged out successfully! 🤗',
+		type: 'success',
+	})
 });

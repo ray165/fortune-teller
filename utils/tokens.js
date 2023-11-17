@@ -6,23 +6,11 @@ const createAccessToken = (id) => {
 	})
 }
 
-const createRefreshToken = (id) => {
-	return sign({ id }, process.env.REFRESH_TOKEN_SECRET, {
-		expiresIn: '90d',
-	})
-}
-
 const sendAccessToken = (req, res, accesstoken) => {
 	res.json({
 		accesstoken,
 		message: 'Sign in Successful 🥳',
 		type: 'success',
-	})
-}
-
-const sendRefreshToken = (res, refreshtoken) => {
-	res.cookie('refreshtoken', refreshtoken, {
-		httpOnly: true,
 	})
 }
 
@@ -35,8 +23,6 @@ const createPasswordResetToken = ({ _id, email, password }) => {
 
 module.exports = {
 	createAccessToken,
-	createRefreshToken,
 	sendAccessToken,
-	sendRefreshToken,
 	createPasswordResetToken,
 }
