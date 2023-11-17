@@ -84,7 +84,8 @@ router.post('/login', async (req, res) => {
 
         let validUser = null;
         for (const user of users) {
-            if (password === user.password) {
+            const passwordMatch = await compare(password, user.password);
+            if (passwordMatch) {
                 validUser = user;
                 break;
             }
@@ -96,7 +97,7 @@ router.post('/login', async (req, res) => {
 
         const accessToken = createAccessToken(validUser._id);
 
-        await validUser.save();
+        // await validUser.save(); //Kris, what was the purpose of this line?
 
 		sendAccessToken(req, res, accessToken);
 
