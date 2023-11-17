@@ -115,3 +115,6 @@ router.post('/logout', async (req, res) => {
 router.post('/send-password-reset-email', async (req, res) => {
     // TODO: To implement for bonus
 });
+
+
+module.exports = router;
