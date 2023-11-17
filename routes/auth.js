@@ -23,14 +23,16 @@ router.get('/', async (req, res) => {
 
 // Routes for user login: can't have multiple johns with the same password
 router.post('/signup', async (req, res) => {
-	try {
-		const { username, password } = req.body;
+
+    try {
+		const { username, email, password } = req.body;
 
         const users = await User.find({ username });
 
         let existingUser = null;
         for (const user of users) {
-            if (password === user.password) {
+            const passwordMatch = await compare(password, user.password);
+            if (passwordMatch) {
                 existingUser = user;
                 break;
             }
@@ -45,9 +47,12 @@ router.post('/signup', async (req, res) => {
 
 		const passwordHash = await hash(password, 10);
 		
+        // FIXME:  NEED TO COME UP WITH LOGIC FOR ROLE. User shouldn't be able to choose their own role. 
         const newUser = new User({
+            username: username,
 			email: email,
 			password: passwordHash,
+            role: 'admin',
 		})
 
 		await newUser.save()
