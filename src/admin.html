@@ -22,6 +22,10 @@
             background-color: #fff;
         }
 
+        #timestamp {
+            margin-bottom: 10px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -38,11 +42,37 @@
             background-color: #4CAF50;
             color: white;
         }
+
+        #refresh-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 6px #999;
+        }
+
+        #refresh-button:hover {
+            background-color: #2196F3; /* Change to blue color on hover */
+        }
+
+        #refresh-button:active {
+            background-color: #2196F3;
+            box-shadow: 0 4px #666;
+            transform: translateY(3px);
+        }
+
     </style>
 </head>
 <body>
     <div id="admin-container">
         <h1>Admin Dashboard</h1>
+
+        <div id="timestamp"></div>
+
+        <button id="refresh-button" onclick="fetchStats()">Refresh Stats</button>
 
         <h2>API Endpoint Stats</h2>
         <table id="endpoint-stats">
@@ -81,8 +111,12 @@
         };
 
         function fetchStats() {
+            const timestampElement = document.getElementById('timestamp');
+            const currentDate = new Date();
+            timestampElement.innerText = `Data last fetched at ${currentDate.toLocaleString()}`;
+
             // Make an AJAX request to the server to get API stats
-            fetch('/api/v1/stats', {
+            fetch('/api/stats', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
