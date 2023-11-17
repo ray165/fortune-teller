@@ -6,12 +6,16 @@ const createAccessToken = (id) => {
 	})
 }
 
-const sendAccessToken = (req, res, accesstoken) => {
-	res.json({
-		accesstoken,
-		message: 'Sign in Successful 🥳',
-		type: 'success',
+const sendAccessToken = (req, res, accessToken) => {
+	res.writeHead(200, {
+		'Set-Cookie': `token=${accessToken}; HttpOnly; Max-Age=3600`,
+		'Content-Type': 'application/json',
 	})
+
+	res.end(JSON.stringify({
+		"message": 'Sign in Successful. Token is HttpOnly cookie 🥳',
+		"type": 'success',
+	}));
 }
 
 const createPasswordResetToken = ({ _id, email, password }) => {
