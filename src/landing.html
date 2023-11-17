@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Fortune-Teller</title>
+    <style>
+        body {
+            background-color: #ff6ec7; /* Neon Pink */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #button-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="button-container">
+        <h1>Welcome to Fortune-Teller!</h1>
+        <button onclick="redirectToLogin()">Login</button>
+        <button onclick="promptSignUp()">Sign Up</button>
+    </div>
+
+    <script>
+        function redirectToLogin() {
+            window.location.href = '/login'; // Update with the correct login page URL
+        }
+
+        function promptSignUp() {
+            alert('Sign Up feature is not implemented yet.'); // You can implement your sign-up logic here
+        }
+    </script>
+</body>
+</html>
