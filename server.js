@@ -58,6 +58,15 @@ app.get('/user_dashboard', (req, res) => {
     res.send('Welcome to User Dashboard');
 });
 
+app.get('/chat', (req, res) => {
+    res.sendFile(__dirname + '/src/chat.html');
+})
+
+app.post('/api/v1/chat', (req, res) => {
+    // ping the hugging face model.
+    // send data back to chat to render the results
+})
+
 app.get('*',function (req, res) {
     res.redirect('/');
 });
