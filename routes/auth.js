@@ -5,6 +5,14 @@ const { verify } = require('jsonwebtoken')
 
 const User = require('../models/user')
 
+const {
+	createAccessToken,
+	createRefreshToken,
+	sendAccessToken,
+	sendRefreshToken,
+	createPasswordResetToken,
+} = require('../utils/tokens')
+
 // Sample users for testing
 // const users = [
 //     { id: 1, username: 'john', password: '123' },
@@ -62,9 +70,7 @@ router.post('/signup', async (req, res) => {
 
 // Routes for user login: allow multiple John as username, match password with all Johns
 router.post('/login', async (req, res) => {
-
     try {
-
         const { username, password } = req.body;
 
         const users = await User.find({ username });
@@ -84,7 +90,22 @@ router.post('/login', async (req, res) => {
         if (!validUser) {
             return res.status(401).json({ message: "Invalid password" });
         }
+
+        const accessToken = createAccessToken(validUser._id);
+		const refreshToken = createRefreshToken(validUser._id);
+
+        validUser.refreshtoken = refreshToken;
+        await validUser.save();
+
+        sendRefreshToken(res, refreshToken);
+		sendAccessToken(req, res, accessToken);
+
     } catch (err) {
-        res.status(500).json({ message: "Internal server error" });
+        console.log('Error: ', err);
+        res.status(500).json({ 
+            message: "Error signing in!", 
+            type: "error",
+            err,
+        });
     }
 });
