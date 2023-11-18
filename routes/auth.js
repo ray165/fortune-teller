@@ -54,9 +54,17 @@ router.post('/signup', async (req, res) => {
 			email: email,
 			password: passwordHash,
             role: 'admin',
+            stats: {}
 		})
 
 		await newUser.save()
+
+        // update endpoint count
+        await User.findOneAndUpdate(
+            { username: username},
+            { $inc: { 'stats.auth/signup': 1}},
+            { new: true}
+        );
 
 		res.status(200).json({
 			message: 'User created successfully! 🥳',
@@ -99,6 +107,13 @@ router.post('/login', async (req, res) => {
         const accessToken = createAccessToken(validUser._id);
         console.log("FOR TESTING AccessToken: ", accessToken );
 
+        // update endpoint count
+        await User.findOneAndUpdate(
+            { username: username},
+            { $inc: { 'stats.auth/login': 1}},
+            { new: true}
+        );
+
         // await validUser.save(); //Kris, what was the purpose of this line?
 
 		sendAccessToken(req, res, accessToken);
@@ -114,9 +129,21 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-    //logic to return the admin page? Need to discuss
-    // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
-    // res.sendFile(landingPagePath);
+    const { token } = req.body;
+    const { validToken, user_id } = await verifyAccessToken(req, res, token);
+    if (validToken) {
+
+        // update endpoint count
+        await User.findOneAndUpdate(
+            { _id: user_id},
+            { $inc: { 'stats.auth/logout': 1}},
+            { new: true}
+        );
+
+        //logic to return the admin page? Need to discuss
+        // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
+        // res.sendFile(landingPagePath);
+    }
 
     return res.json({
 		message: 'Logged out successfully! 🤗',
