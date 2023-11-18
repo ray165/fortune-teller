@@ -52,6 +52,10 @@ app.post('/api/v1/chat', (req, res) => {
     // send data back to chat to render the results
 })
 
+app.get('/loginpage',function (req, res) {
+    res.sendFile(__dirname + '/src/login.html');
+});
+
 app.get('*',function (req, res) {
     res.redirect('/');
 });
