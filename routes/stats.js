@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const { verifyAccessToken } = require('../utils/tokens')
+const Stats = require('../models/stats');
+
 
 
 /**
@@ -19,6 +21,18 @@ const { verifyAccessToken } = require('../utils/tokens')
 
 router.get('/', async (req, res) => {
     res.send('Hello 👋, this is stats endpoint');
+});
+
+router.get('/all', async (req, res) => {
+    // pull all data from mongodb
+    // send all data back to client
+    Stats.find({}).then(stats => {
+        console.log(stats);
+        res.json(stats);
+    }).catch(err => {
+        console.error(err);
+        res.json([]);
+    });
 });
 
 router.get('/update', async (req, res) => {

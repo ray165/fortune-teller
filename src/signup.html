@@ -3,42 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Signup Page</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form id="loginForm">
+    <h2>Signup</h2>
+    <form id="signupForm">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <button type="button" onclick="login()">Login</button>
+        <button type="button" onclick="signup()">Signup</button>
     </form>
 
     <script>
-        function login() {
+        function signup() {
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
+            var email = document.getElementById('email').value;
 
-            // Perform AJAX request to your server to validate the login
+            // Perform AJAX request to your server to create a new user
             // Update the URL based on your server setup
             // Example using Fetch API
-            fetch('http://localhost:3000/auth/login', {
+            fetch('http://localhost:3000/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: username, password: password }),
+                body: JSON.stringify({ username: username, email: email, password: password }),
             })
             .then(response => response.json())
             .then(data => {
                 // Handle the response from the server
                 if (data.success) {
-                    window.location.href = data.redirect; // Redirect to user or admin dashboard
+                    alert('Signup successful. Please login.');
+                    window.location.href = data.redirect; // Redirect to login page
                 } else {
-                    alert('Login failed. Please check your credentials.');
+                    alert('Signup failed. Please try again.');
                 }
             })
             .catch((error) => {

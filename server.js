@@ -1,6 +1,8 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
+const {logUsage} = require('./utils/logger');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -21,7 +23,9 @@ mongoose
 		console.log('MongoDB connection is established successfully! 🎉')
 	})
 
+app.use(cors());
 app.use(bodyParser.json());
+app.use(logUsage)
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/stats', statsRouter);
