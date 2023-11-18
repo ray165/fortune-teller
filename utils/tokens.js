@@ -21,6 +21,8 @@ const sendAccessToken = (req, res, accessToken) => {
 }
 
 const verifyAccessToken = async (req, res, token) => {
+	console.log("calling verifyAccessToken");
+
 	try {
 		let decode = verify(token, process.env.ACCESS_TOKEN_SECRET);
 		let user_id = decode.id
@@ -30,15 +32,19 @@ const verifyAccessToken = async (req, res, token) => {
 			const validUser = await User.findOne({ _id: user_id });
 
 			if (validUser) {
-				return (true, user_id)
+				
+				console.log(`validToken: true, user_id: ${user_id}`)
+				return {validToken: true, user_id}
 			}
 		}
 
-		return false;
+		console.log(`validToken: false, user_id: null`)
+		return {validToken: false, user_id: null};
 
 	} catch (err) {
 		if (err instanceof JsonWebTokenError) {
-			return false
+			console.log(`validToken: false, user_id: null`)
+			return {validToken: false, user_id: null};
 		}
 		console.log('JWT Error: ', err);
 		res.status(500).json({
