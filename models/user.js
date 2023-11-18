@@ -18,6 +18,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    stats: {
+        type: Object,
+        default: {},
+    }
 })
 
 module.exports = model('User', userSchema);
