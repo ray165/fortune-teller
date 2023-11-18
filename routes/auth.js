@@ -131,20 +131,22 @@ router.post('/login', async (req, res) => {
 router.post('/logout', async (req, res) => {
     const { token } = req.body;
     const { validToken, user_id } = await verifyAccessToken(req, res, token);
-    if (validToken) {
 
-        // update endpoint count
-        await User.findOneAndUpdate(
-            { _id: user_id},
-            { $inc: { 'stats.auth/logout': 1}},
-            { new: true}
-        );
-
-        //logic to return the admin page? Need to discuss
-        // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
-        // res.sendFile(landingPagePath);
+    if (!validToken){
+        return res.status(404).json({ message: "Unauthorized" });
     }
 
+    // update endpoint count
+    await User.findOneAndUpdate(
+        { _id: user_id},
+        { $inc: { 'stats.auth/logout': 1}},
+        { new: true}
+    );
+
+    //logic to return the admin page? Need to discuss
+    // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
+    // res.sendFile(landingPagePath);
+    
     return res.json({
 		message: 'Logged out successfully! 🤗',
 		type: 'success',
