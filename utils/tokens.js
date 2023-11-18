@@ -25,12 +25,12 @@ const verifyAccessToken = async (req, res, token) => {
 		let decode = verify(token, process.env.ACCESS_TOKEN_SECRET);
 		let user_id = decode.id
 
-		// verify if the decoded id is one of our users
+		// verify if the decoded id is a user in the DB
 		if (user_id) {
 			const validUser = await User.findOne({ _id: user_id });
 
 			if (validUser) {
-				return true
+				return (true, user_id)
 			}
 		}
 

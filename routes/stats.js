@@ -6,7 +6,7 @@ const { verifyAccessToken } = require('../utils/tokens')
 /**
  *  Steps:
  *      0. Validate JWT if they have authorization before running the update request
- *          - can use verifyAccessToken import function. If JWT token is valid, returns True, else False
+ *          - can use verifyAccessToken import function. If JWT token is valid, returns (True, user_id), else False
  *      
  *      1. create a model to query the usage stats in mongodb
  *      2. Pull all data then filter it. Have two version of data sent back to client
