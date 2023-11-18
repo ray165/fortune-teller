@@ -1,4 +1,6 @@
-const { sign } = require('jsonwebtoken');
+const { sign, verify } = require('jsonwebtoken');
+const User = require('../models/user')
+
 
 const createAccessToken = (id) => {
 	return sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
@@ -18,6 +20,32 @@ const sendAccessToken = (req, res, accessToken) => {
 	}));
 }
 
+const verifyAccessToken = async (req, res, token) => {
+	try {
+		let decode = verify(token, process.env.ACCESS_TOKEN_SECRET);
+		let user_id = decode.id
+
+		// verify if the decoded id is one of our users
+		if (user_id) {
+			const validUser = await User.findOne({ _id: user_id });
+
+			if (validUser) {
+				return true
+			}
+		}
+
+		return false;
+
+	} catch (err) {
+		console.log('JWT Error: ', err);
+		res.status(500).json({
+			message: "Error with authorization",
+			type: "error",
+			err,
+		});
+	}
+}
+
 const createPasswordResetToken = ({ _id, email, password }) => {
 	const secret = password
 	return sign({ id: _id, email }, secret, {
@@ -28,5 +56,6 @@ const createPasswordResetToken = ({ _id, email, password }) => {
 module.exports = {
 	createAccessToken,
 	sendAccessToken,
+	verifyAccessToken,
 	createPasswordResetToken,
 }
