@@ -40,6 +40,15 @@ router.post('/signup', async (req, res) => {
         }
 
         if (existingUser) {
+            // update endpoint count
+            await User.findOneAndUpdate(
+                { username: username},
+                {
+                    $inc: { 'stats.auth/signup.count': 1},
+                },
+                { new: true}
+            );
+
             return res.status(500).json({ 
                 message: "User already exists! Try logging in. 👍🏻", 
                 type: "warning" ,
@@ -62,7 +71,10 @@ router.post('/signup', async (req, res) => {
         // update endpoint count
         await User.findOneAndUpdate(
             { username: username},
-            { $inc: { 'stats.auth/signup': 1}},
+            {
+                $inc: { 'stats.auth/signup.count': 1},
+                $set: { 'stats.auth/signup.method': 'POST' }
+            },
             { new: true}
         );
 
@@ -110,7 +122,10 @@ router.post('/login', async (req, res) => {
         // update endpoint count
         await User.findOneAndUpdate(
             { username: username},
-            { $inc: { 'stats.auth/login': 1}},
+            { 
+                $inc: { 'stats.auth/login.count': 1},
+                $set: { 'stats.auth/login.method': 'POST' }
+            },
             { new: true}
         );
 
@@ -139,7 +154,10 @@ router.post('/logout', async (req, res) => {
     // update endpoint count
     await User.findOneAndUpdate(
         { _id: user_id},
-        { $inc: { 'stats.auth/logout': 1}},
+        { 
+            $inc: { 'stats.auth/logout.count': 1},
+            $set: { 'stats.auth/logout.method': 'POST' }
+        },
         { new: true}
     );
 

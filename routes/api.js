@@ -31,7 +31,10 @@ router.post('/question', async (req, res) => {
         // update endpoint count
         await User.findOneAndUpdate(
             { _id: user_id},
-            { $inc: { 'stats.api/question': 1}},
+            { 
+                $inc: { 'stats.api/question.count': 1},
+                $set: { 'stats.api/question.method': 'POST' }
+            },
             { new: true}
         );
 
