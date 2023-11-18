@@ -8,6 +8,7 @@ const User = require('../models/user')
 const {
 	createAccessToken,
 	sendAccessToken,
+    verifyAccessToken,
 	createPasswordResetToken,
 } = require('../utils/tokens')
 
@@ -96,6 +97,7 @@ router.post('/login', async (req, res) => {
         }
 
         const accessToken = createAccessToken(validUser._id);
+        console.log("FOR TESTING AccessToken: ", accessToken );
 
         // await validUser.save(); //Kris, what was the purpose of this line?
 
@@ -112,6 +114,10 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
+    //logic to return the admin page? Need to discuss
+    // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
+    // res.sendFile(landingPagePath);
+
     return res.json({
 		message: 'Logged out successfully! 🤗',
 		type: 'success',
