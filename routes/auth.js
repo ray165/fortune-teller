@@ -145,7 +145,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     const { token } = req.body;
-    const { validToken, user_id } = await verifyAccessToken(req, res, token);
+    const { validToken, user_id } = await verifyAccessToken(token);
 
     if (!validToken){
         return res.status(404).json({ message: "Unauthorized" });

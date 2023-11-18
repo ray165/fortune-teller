@@ -20,19 +20,17 @@ const sendAccessToken = (req, res, accessToken) => {
 	}));
 }
 
-const verifyAccessToken = async (req, res, token) => {
-	console.log("calling verifyAccessToken");
+const verifyAccessToken = async (token) => {
+	console.log("calling verifyAccessToken with token: ", token);
 
 	try {
 		let decode = verify(token, process.env.ACCESS_TOKEN_SECRET);
 		let user_id = decode.id
-
 		// verify if the decoded id is a user in the DB
 		if (user_id) {
 			const validUser = await User.findOne({ _id: user_id });
 
 			if (validUser) {
-				
 				console.log(`validToken: true, user_id: ${user_id}`)
 				return {validToken: true, user_id}
 			}
@@ -47,11 +45,7 @@ const verifyAccessToken = async (req, res, token) => {
 			return {validToken: false, user_id: null};
 		}
 		console.log('JWT Error: ', err);
-		res.status(500).json({
-			message: "Error with authorization",
-			type: "error",
-			err,
-		});
+		return {validToken: false, user_id: null, error : err};
 	}
 }
 

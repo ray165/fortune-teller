@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const { hash, compare } = require('bcryptjs')
 const { verifyAccessToken } = require('../utils/tokens')
 const Stats = require('../models/stats');
-
+const User = require('../models/user');
+const { getUser } = require('../utils/user');
 
 
 /**
@@ -23,17 +25,47 @@ router.get('/', async (req, res) => {
     res.send('Hello 👋, this is stats endpoint');
 });
 
-router.get('/all', async (req, res) => {
-    // pull all data from mongodb
-    // send all data back to client
+// Use this endpoint to get usage stats for all users
+router.get('/allUsers', async (req, res) => {
+    const { username, password, token } = req.body;
+    const { message, user } = await getUser(username, password, token);
+
+    if (!user) {
+        return res.status(401).json({ message });
+    }
+
     Stats.find({}).then(stats => {
-        console.log(stats);
+        // console.log(stats);
         res.json(stats);
     }).catch(err => {
         console.error(err);
         res.json([]);
     });
 });
+
+// Routes for user login: allow multiple John as username, match password with all Johns
+router.post('/myUser', async (req, res) => {
+    try {
+        const { username, password, token } = req.body;
+        const { message, user } = await getUser(username, password, token);
+
+        if (!user) {
+            return res.status(401).json({ message });
+        }
+
+        // console.log(users[0].stats);
+        res.json(user.stats);
+
+    } catch (err) {
+        console.log('Error: ', err);
+        res.status(500).json({ 
+            message: "Error signing in!", 
+            type: "error",
+            err,
+        });
+    }
+});
+
 
 router.get('/update', async (req, res) => {
     res.send('something');
