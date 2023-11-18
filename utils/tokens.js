@@ -1,4 +1,4 @@
-const { sign, verify } = require('jsonwebtoken');
+const { sign, verify, JsonWebTokenError } = require('jsonwebtoken');
 const User = require('../models/user')
 
 
@@ -37,6 +37,9 @@ const verifyAccessToken = async (req, res, token) => {
 		return false;
 
 	} catch (err) {
+		if (err instanceof JsonWebTokenError) {
+			return false
+		}
 		console.log('JWT Error: ', err);
 		res.status(500).json({
 			message: "Error with authorization",
