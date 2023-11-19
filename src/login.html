@@ -34,9 +34,10 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Success:', data);
                 // Handle the response from the server
-                if (data.success) {
-                    window.location.href = data.redirect; // Redirect to user or admin dashboard
+                if (data.type === 'success') {
+                    window.location.href = '/src/chat.html';
                 } else {
                     alert('Login failed. Please check your credentials.');
                 }

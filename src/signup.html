@@ -38,12 +38,13 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Success:', data);
+                console.log(data.message);
                 // Handle the response from the server
-                if (data.success) {
-                    alert('Signup successful. Please login.');
-                    window.location.href = data.redirect; // Redirect to login page
+                if (data.type === 'success') {
+                    window.location.href = '/src/chat.html';
                 } else {
-                    alert('Signup failed. Please try again.');
+                    alert(`Sign up failed: ${data.message}`);
                 }
             })
             .catch((error) => {
