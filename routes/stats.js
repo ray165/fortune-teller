@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { hash, compare } = require('bcryptjs')
-const { verifyAccessToken } = require('../utils/tokens')
+const { verifyAccessToken, isUserAuthenticated } = require('../utils/tokens')
 const Stats = require('../models/stats');
 const User = require('../models/user');
 const { getUser } = require('../utils/user');
@@ -22,11 +22,14 @@ const { getUser } = require('../utils/user');
  */
 
 router.get('/', async (req, res) => {
+    isUserAuthenticated(req, res);
     res.send('Hello 👋, this is stats endpoint');
 });
 
 // Use this endpoint to get usage stats for all users
 router.get('/allUsers', async (req, res) => {
+    isUserAuthenticated(req, res);
+
     const { username, password, token } = req.body;
     const { message, user } = await getUser(username, password, token);
 
@@ -45,6 +48,8 @@ router.get('/allUsers', async (req, res) => {
 
 // Routes for user login: allow multiple John as username, match password with all Johns
 router.post('/myUser', async (req, res) => {
+    isUserAuthenticated(req, res);
+
     try {
         const { username, password, token } = req.body;
         const { message, user } = await getUser(username, password, token);

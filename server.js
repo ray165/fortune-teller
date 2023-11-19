@@ -5,6 +5,7 @@ const cors = require('cors');
 const {logUsage} = require('./utils/logger');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
@@ -25,7 +26,8 @@ mongoose
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(logUsage)
+app.use(cookieParser());
+app.use(logUsage);
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/stats', statsRouter);
@@ -54,6 +56,10 @@ app.post('/api/v1/chat', (req, res) => {
 
 app.get('/loginpage',function (req, res) {
     res.sendFile(__dirname + '/src/login.html');
+});
+
+app.get('/signuppage',function (req, res) {
+    res.sendFile(__dirname + '/src/signup.html');
 });
 
 app.get('*',function (req, res) {

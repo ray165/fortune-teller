@@ -24,6 +24,7 @@ const verifyAccessToken = async (token) => {
 	console.log("calling verifyAccessToken with token: ", token);
 
 	try {
+		if (!token) throw new Error("token is empty bro (⊙_⊙;)")
 		let decode = verify(token, process.env.ACCESS_TOKEN_SECRET);
 		let user_id = decode.id
 		// verify if the decoded id is a user in the DB
@@ -56,9 +57,37 @@ const createPasswordResetToken = ({ _id, email, password }) => {
 	})
 }
 
+const isUserAuthenticated = (req, res) => {
+	var flag = false
+	console.log("isUserAuthenticated() called")
+	try {
+		let myCookie = req.cookies['token']
+		verifyAccessToken(myCookie)
+		.then((data) => {
+			if (data['validToken'] == true) {
+				console.log('token is valid')
+				flag = true
+			} else {
+				throw new Error("token is not valid")
+			}
+		})
+		.catch((e) => {
+			console.error("verify access token method failed", e)
+			// res.status(403,"You do not have rights to visit this page");
+			// res.status(403).send("nope!");
+		})
+	} catch (e) {
+		console.error(e)
+		// res.status(403).end();
+	}
+
+	if (!flag) throw new Error("Express handled exception 😥")
+}
+
 module.exports = {
 	createAccessToken,
 	sendAccessToken,
 	verifyAccessToken,
 	createPasswordResetToken,
+	isUserAuthenticated
 }

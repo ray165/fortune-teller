@@ -1,5 +1,5 @@
 const { default: axios } = require('axios');
-const { verifyAccessToken } = require('../utils/tokens')
+const { verifyAccessToken, isUserAuthenticated} = require('../utils/tokens')
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/question', async (req, res) => {
+    isUserAuthenticated(req, res);
 
     try {
         const MODEL_URL = '';
