@@ -15,6 +15,11 @@ const apiRouter = require('./routes/api');
 const app = express();
 const port = 3000;
 
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
+
 mongoose
 	.connect(process.env.MONGO_URI, {
 		useNewUrlParser: true,
@@ -24,7 +29,7 @@ mongoose
 		console.log('MongoDB connection is established successfully! 🎉')
 	})
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(logUsage);
