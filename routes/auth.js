@@ -130,8 +130,7 @@ router.post('/login', async (req, res) => {
         );
 
         // await validUser.save(); //Kris, what was the purpose of this line?
-
-		sendAccessToken(req, res, accessToken);
+		sendAccessToken(req, res, accessToken, validUser.role);
 
     } catch (err) {
         console.log('Error: ', err);

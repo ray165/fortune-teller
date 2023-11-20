@@ -8,13 +8,14 @@ const createAccessToken = (id) => {
 	})
 }
 
-const sendAccessToken = (req, res, accessToken) => {
+const sendAccessToken = (req, res, accessToken, role) => {
 	res.writeHead(200, {
 		'Set-Cookie': `token=${accessToken}; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
 		'Content-Type': 'application/json',
 	})
 
 	res.end(JSON.stringify({
+		"role": role,
 		"message": 'Sign in Successful. Token is HttpOnly cookie 🥳',
 		"type": 'success',
 	}));
@@ -84,10 +85,29 @@ const isUserAuthenticated = (req, res) => {
 	if (!flag) throw new Error("Express handled exception 😥")
 }
 
+const retrieveTokenFromCookie = (request) => {
+	var token = null,
+	  rc = request.headers.cookie;
+  
+	rc &&
+	  rc.split(';').forEach(function (cookie) {
+		var parts = cookie.split('=');
+		var cookieName = parts[0].trim();
+		var cookieValue = decodeURIComponent(parts[1]);
+  
+		if (cookieName === 'token') {
+		  token = cookieValue;
+		}
+	  });
+  
+	return token;
+  }
+
 module.exports = {
 	createAccessToken,
 	sendAccessToken,
 	verifyAccessToken,
 	createPasswordResetToken,
-	isUserAuthenticated
+	isUserAuthenticated,
+	retrieveToken: retrieveTokenFromCookie
 }

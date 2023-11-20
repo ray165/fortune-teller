@@ -104,8 +104,8 @@
         <table id="endpoint-stats">
             <thead>
                 <tr>
-                    <th>Method</th>
                     <th>Endpoint</th>
+                    <th>Method</th>
                     <th># of Requests</th>
                 </tr>
             </thead>
@@ -114,7 +114,7 @@
             </tbody>
         </table>
 
-        <h2>API Usage Breakdown</h2>
+        <!-- <h2>API Usage Breakdown</h2>
         <table id="usage-breakdown">
             <thead>
                 <tr>
@@ -125,9 +125,8 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Data will be dynamically added here using JavaScript -->
             </tbody>
-        </table>
+        </table> -->
     </div>
 
     <script>
@@ -142,8 +141,9 @@
             timestampElement.innerText = `Data last fetched at ${currentDate.toLocaleString()}`;
 
             // Make an AJAX request to the server to get API stats
-            fetch('/api/stats', {
+            fetch('http://localhost:3000/stats/allUsers', {
                 method: 'GET',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     // Add any necessary authentication headers
@@ -151,9 +151,10 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Data received:', data);
                 // Update the tables with the received data
-                updateTable('endpoint-stats', data.endpointStats);
-                updateTable('usage-breakdown', data.usageBreakdown);
+                updateTable('endpoint-stats', data);
+                // updateTable('usage-breakdown', data.usageBreakdown);
             })
             .catch(error => {
                 console.error('Error fetching stats:', error);
@@ -169,7 +170,7 @@
 
         function updateTable(tableId, data) {
             const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-
+            const ignoreKeys = ['_id', '__v'];
             // Clear existing data
             tableBody.innerHTML = '';
 
@@ -177,6 +178,9 @@
             data.forEach(item => {
                 const row = tableBody.insertRow();
                 for (const key in item) {
+                    if (ignoreKeys.includes(key)) {
+                        continue;
+                    }
                     if (Object.hasOwnProperty.call(item, key)) {
                         const cell = row.insertCell();
                         cell.appendChild(document.createTextNode(item[key]));
