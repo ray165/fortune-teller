@@ -130,6 +130,13 @@
     </div>
 
     <script>
+        let url = ""
+        if (process.env.NODE_ENV == 'DEVELOPMENT') {
+            url = 'http://localhost:3000/stats/allUsers'
+        } else {
+            url = process.env.RENDER_URI + "stats/allUsers"
+        }
+
         // Fetch API stats when the page loads
         window.onload = function () {
             fetchStats();
@@ -141,7 +148,7 @@
             timestampElement.innerText = `Data last fetched at ${currentDate.toLocaleString()}`;
 
             // Make an AJAX request to the server to get API stats
-            fetch('http://localhost:3000/stats/allUsers', {
+            fetch(url, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

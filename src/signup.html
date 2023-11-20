@@ -29,7 +29,14 @@
             // Perform AJAX request to your server to create a new user
             // Update the URL based on your server setup
             // Example using Fetch API
-            fetch('http://localhost:3000/auth/signup', {
+            let url = ""
+            if (process.env.NODE_ENV == 'DEVELOPMENT') {
+                url = 'http://localhost:3000/auth/signup'
+            } else {
+                url = process.env.RENDER_URI + "auth/signup"
+            }
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

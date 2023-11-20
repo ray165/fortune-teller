@@ -22,10 +22,17 @@
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
 
+            let url = ""
+            if (process.env.NODE_ENV == 'DEVELOPMENT') {
+                url = 'http://localhost:3000/auth/login'
+            } else {
+                url = process.env.RENDER_URI + "auth/login"
+            }
+
             // Perform AJAX request to your server to validate the login
             // Update the URL based on your server setup
             // Example using Fetch API
-            fetch('http://localhost:3000/auth/login', {
+            fetch(url, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
