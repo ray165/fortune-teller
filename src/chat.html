@@ -70,15 +70,38 @@
     <script>
         function sendMessage() {
             const userMessage = document.getElementById('user-message').value;
+
             if (userMessage.trim() !== '') {
-                appendMessage('user', userMessage);
-                // Implement logic to send user message to server and get ChatGPT's response
-                // For simplicity, just a dummy response is shown here
-                setTimeout(() => {
-                    appendMessage('chatbot', 'This is a dummy response from ChatGPT.');
-                }, 500);
-                document.getElementById('user-message').value = ''; // Clear input field
+                fetch('http://localhost:3000/api/question', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    setTimeout(() => {
+                        appendMessage('chatbot', data["message"]);
+                    }, 500);
+                    document.getElementById('user-message').value = ''; // Clear input field
+                })
+                .catch(error => console.error('ERROR: ', error));
             }
+
+
+            // if (userMessage.trim() !== '') {
+            //     appendMessage('user', userMessage);
+            //     // Implement logic to send user message to server and get ChatGPT's response
+            //     // For simplicity, just a dummy response is shown here
+            //     setTimeout(() => {
+            //         appendMessage('chatbot', 'This is a dummy response from ChatGPT.');
+            //     }, 500);
+            //     document.getElementById('user-message').value = ''; // Clear input field
+            // }
         }
 
         function appendMessage(sender, message) {
