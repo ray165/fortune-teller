@@ -10,7 +10,7 @@ const createAccessToken = (id) => {
 
 const sendAccessToken = (req, res, accessToken) => {
 	res.writeHead(200, {
-		'Set-Cookie': `token=${accessToken}; HttpOnly; Max-Age=3600`,
+		'Set-Cookie': `token=${accessToken}; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
 		'Content-Type': 'application/json',
 	})
 
