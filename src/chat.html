@@ -68,18 +68,18 @@
     </div>
 
     <script>
-        let url = ""
-        if (process.env.NODE_ENV == 'DEVELOPMENT') {
-            url = 'http://localhost:3000/api/question'
-        } else {
-            url = process.env.RENDER_URI + "api/question"
-        }
+        // let url = ""
+        // if (process.env.NODE_ENV == 'DEVELOPMENT') {
+        //     url = 'http://localhost:3000/api/question'
+        // } else {
+        //     url = process.env.RENDER_URI + "api/question"
+        // }
 
         function sendMessage() {
             const userMessage = document.getElementById('user-message').value;
 
             if (userMessage.trim() !== '') {
-                fetch(url, {
+                fetch("https://isa-fortune-teller-backend.onrender.com/api/question", {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
