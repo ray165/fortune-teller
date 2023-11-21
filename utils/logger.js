@@ -8,6 +8,8 @@ const endpointWhitelist = [ // Whitelist of endpoints that we want to track
     '/stats/all',
     '/stats/update',
     '/stats/reset',
+    '/stats/myUser',
+    '/stats/allUsers',
 ];
 
 function logUsage(req, res, next) {
