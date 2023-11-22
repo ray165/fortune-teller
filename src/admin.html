@@ -169,10 +169,23 @@
         }
 
         function resetStats() {
-            // Implement logic to reset stats on the server
-            // For example, send a request to '/api/resetStats'
-            // and handle the reset on the server side
             console.log('Stats reset!');
+            // reset-count
+            fetch("https://isa-fortune-teller-backend.onrender.com/stats/reset-count", {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+                fetchStats();  // not sure if nested Fetch requests will work?
+            })
+            .catch(error => {
+                console.error('Error resetting stats:', error);
+            });
         }
 
         function updateTable(tableId, data) {
