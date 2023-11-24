@@ -4,6 +4,12 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
+
+router.use(cors(corsOptions));
 
 router.get('/', async (req, res) => {
     res.send('Hello 👋, this is API endpoint');
@@ -24,7 +30,7 @@ router.post('/question', async (req, res) => {
         console.log("TOKEN RECEIVED: ", token)
 
         try {
-            const MODEL_URL = '';
+            const MODEL_URL = process.env.MODEL_URL;
             const question = req.body.message;
             console.log("question: ", question);
             const { validToken, user_id } = await verifyAccessToken(token);
