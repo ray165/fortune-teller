@@ -2,6 +2,8 @@ const { default: axios } = require('axios');
 const { verifyAccessToken, isUserAuthenticated} = require('../utils/tokens')
 const express = require('express')
 const router = express.Router()
+const cors = require('cors');
+
 const User = require('../models/user')
 
 const corsOptions = {
