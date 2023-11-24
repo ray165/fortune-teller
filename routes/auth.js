@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { hash, compare } = require('bcryptjs')
 const { verify } = require('jsonwebtoken')
+const cors = require('cors');
 
 const User = require('../models/user')
 
