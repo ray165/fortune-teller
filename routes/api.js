@@ -35,11 +35,17 @@ router.post('/question', async (req, res) => {
     
             // call model endpoint
             const postData = {
-                "api-key": process.env.API_KEY,
-                "quesion": question
+                inputs: question,
+                parameters : {
+                    repetition_penalty: 4.0,
+                    max_time: 60, 
+                    max_new_tokens: 300,
+                    use_cache: false,
+                    temperature: 0.8
+                }
             }
     
-            // const response = await axios.post(MODEL_URL, postData);
+            const response = await axios.post(MODEL_URL, postData);
     
             // update endpoint count
             await User.findOneAndUpdate(
@@ -52,8 +58,8 @@ router.post('/question', async (req, res) => {
             );
     
             res.status(200).json({
-                // message: response.data,
-                message: 'Dummy data from server model call',
+                message: response.data,
+                // message: 'Dummy data from server model call',
                 type: 'success',
             })
     
