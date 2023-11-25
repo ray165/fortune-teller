@@ -52,7 +52,7 @@ router.get('/allUsers', async (req, res) => {
 // Use this endpoint to get usage stats for EACH user
 router.get('/eachUser', async (req, res) => {
     const token = retrieveToken(req);
-    console.log("allUsers endpoint called");
+    console.log("each user endpoint called");
     const { username, password} = req.body;
     const { message, user } = await getUser(username, password, token);
 
