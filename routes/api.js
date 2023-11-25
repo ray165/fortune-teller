@@ -40,7 +40,7 @@ router.post('/question', async (req, res) => {
                 parameters: {
                     repetition_penalty: 4.0,
                     max_time: 60,
-                    max_new_tokens: 300,
+                    max_new_tokens: 100,
                     use_cache: false,
                     temperature: 0.8
                 }
