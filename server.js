@@ -16,7 +16,7 @@ const app = express();
 const port = 3000;
 
 const corsOptions = {
-    origin: "*",
+    origin: "https://fortune-teller-fe.onrender.com/, https://fortune-teller-fe.onrender.com/*",
     credentials: true
 }
 
