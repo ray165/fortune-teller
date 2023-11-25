@@ -173,7 +173,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Data received:', data);
-                updateTable('usage-breakdown', data.usageBreakdown ?? []);
+                updateTable('usage-breakdown', data ?? []);
             })
             .catch(error => {
                 console.error('Error fetching each user stats:', error);
