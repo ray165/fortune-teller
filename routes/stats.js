@@ -3,7 +3,7 @@ const router = express.Router()
 const { hash, compare } = require('bcryptjs')
 const { verifyAccessToken, isUserAuthenticated, retrieveToken } = require('../utils/tokens')
 const Stats = require('../models/stats');
-const User = require('../models/user');
+const MongoUser = require('../models/user');
 const { getUser } = require('../utils/user');
 
 
@@ -28,7 +28,6 @@ router.get('/', async (req, res) => {
 
 // Use this endpoint to get usage stats for all users
 router.get('/allUsers', async (req, res) => {
-    // isUserAuthenticated(req, res);
     const token = retrieveToken(req);
     console.log("allUsers endpoint called");
     const { username, password} = req.body;
@@ -46,6 +45,43 @@ router.get('/allUsers', async (req, res) => {
         console.error(err);
         res.json([]);
     });
+});
+
+// Use this endpoint to get usage stats for EACH user
+router.get('/eachUser', async (req, res) => {
+    const token = retrieveToken(req);
+    console.log("eachUser endpoint called");
+    const { username, password} = req.body;
+    const { message, user } = await getUser(username, password, token);
+
+    if (!user) {
+        return res.status(401).json({ message });
+    }
+
+    const pipeline = [
+        {
+          $project: {
+            username: 1,
+            email: 1,
+            total_count: { $sum: '$stats.list.count' },
+          },
+        },
+    ];
+      
+    // Execute the aggregation pipeline
+    MongoUser.aggregate(pipeline)
+        .then((result) => {
+          console.log(result);
+          res.json(result);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.json([]);
+        })
+        .finally(() => {
+          // Close the connection after the query is executed
+          connection.close();
+        });
 });
 
 

@@ -137,7 +137,6 @@
         //     url = process.env.RENDER_URI + "stats/allUsers"
         // }
 
-        // Fetch API stats when the page loads
         window.onload = function () {
             fetchStats();
         };
@@ -153,19 +152,33 @@
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Add any necessary authentication headers
                 },
             })
             .then(response => response.json())
             .then(data => {
                 console.log('Data received:', data);
-                // Update the tables with the received data
                 updateTable('endpoint-stats', data);
-                updateTable('usage-breakdown', data.usageBreakdown);
             })
             .catch(error => {
                 console.error('Error fetching stats:', error);
             });
+
+            fetch("https://isa-fortune-teller-backend.onrender.com/stats/eachUser", {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+                updateTable('usage-breakdown', data.usageBreakdown);
+            })
+            .catch(error => {
+                console.error('Error fetching each user stats:', error);
+            });
+
         }
 
         function resetStats() {

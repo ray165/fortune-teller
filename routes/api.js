@@ -6,13 +6,6 @@ const cors = require('cors');
 
 const User = require('../models/user')
 
-// const corsOptions = {
-//     origin: '*',
-//     credentials: true
-// }
-
-// router.use(cors(corsOptions));
-
 router.get('/', async (req, res) => {
     res.send('Hello 👋, this is API endpoint');
 });
