@@ -3,6 +3,8 @@ const router = express.Router()
 const { hash, compare } = require('bcryptjs')
 const { verifyAccessToken, isUserAuthenticated, retrieveToken } = require('../utils/tokens')
 const Stats = require('../models/stats');
+// const User = require('../models/user');
+const UserStats = require('../models/userStats');
 const MongoUser = require('../models/user');
 const { getUser } = require('../utils/user');
 
@@ -50,7 +52,7 @@ router.get('/allUsers', async (req, res) => {
 // Use this endpoint to get usage stats for EACH user
 router.get('/eachUser', async (req, res) => {
     const token = retrieveToken(req);
-    console.log("eachUser endpoint called");
+    console.log("allUsers endpoint called");
     const { username, password} = req.body;
     const { message, user } = await getUser(username, password, token);
 
@@ -58,26 +60,14 @@ router.get('/eachUser', async (req, res) => {
         return res.status(401).json({ message });
     }
 
-    const pipeline = [
-        {
-          $project: {
-            username: 1,
-            email: 1,
-            requestCount: { $sum: '$stats.object.count' },
-          },
-        },
-    ];
-      
-    // Execute the aggregation pipeline
-    MongoUser.aggregate(pipeline)
-        .then((result) => {
-          console.log(result);
-          res.json(result);
-        })
-        .catch((err) => {
-          console.error(err);
-          res.json([]);
-        });
+    UserStats.find({}).then(stats => {
+        // console.log(stats);
+        console.log("stats: ", stats);
+        res.json(stats);
+    }).catch(err => {
+        console.error(err);
+        res.json([]);
+    });
 });
 
 
