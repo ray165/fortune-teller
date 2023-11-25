@@ -63,7 +63,7 @@ router.get('/eachUser', async (req, res) => {
           $project: {
             username: 1,
             email: 1,
-            total_count: { $sum: '$stats.list.count' },
+            requestCount: { $sum: '$stats.object.count' },
           },
         },
     ];
@@ -77,10 +77,6 @@ router.get('/eachUser', async (req, res) => {
         .catch((err) => {
           console.error(err);
           res.json([]);
-        })
-        .finally(() => {
-          // Close the connection after the query is executed
-          connection.close();
         });
 });
 
