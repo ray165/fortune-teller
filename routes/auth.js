@@ -160,15 +160,10 @@ router.post('/logout', async (req, res) => {
         },
         { new: true}
     );
-
-    //logic to return the admin page? Need to discuss
-    // let landingPagePath = path.join(__dirname, '../', 'src', 'admin.html');
-    // res.sendFile(landingPagePath);
     
-    return res.json({
-		message: 'Logged out successfully! 🤗',
-		type: 'success',
-	})
+    // send a httpOnly cookie that expired and is empty string
+    res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
+    res.status(200).json({ message: "Logout successful"});
 });
 
 router.post('/send-password-reset-email', async (req, res) => {
