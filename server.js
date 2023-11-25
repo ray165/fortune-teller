@@ -17,7 +17,9 @@ const port = 3000;
 
 const corsOptions = {
     origin: "https://fortune-teller-fe.onrender.com",
-    credentials: true
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization"
 }
 
 // april is abusive
