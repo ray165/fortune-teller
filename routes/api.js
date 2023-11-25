@@ -6,12 +6,12 @@ const cors = require('cors');
 
 const User = require('../models/user')
 
-const corsOptions = {
-    origin: '*',
-    credentials: true
-}
+// const corsOptions = {
+//     origin: '*',
+//     credentials: true
+// }
 
-router.use(cors(corsOptions));
+// router.use(cors(corsOptions));
 
 router.get('/', async (req, res) => {
     res.send('Hello 👋, this is API endpoint');
@@ -78,7 +78,7 @@ router.post('/question', async (req, res) => {
             res.status(500).json({
                 type: 'error',
                 message: 'Error creating user!',
-                error,
+                error: err,
             })
         }
 

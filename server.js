@@ -16,7 +16,7 @@ const app = express();
 const port = 3000;
 
 const corsOptions = {
-    origin: true,
+    origin: "*",
     credentials: true
 }
 
