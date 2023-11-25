@@ -74,7 +74,7 @@
             cursor: pointer;
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 80px;
             box-shadow: 0 3px #999;
         }
 
@@ -88,6 +88,26 @@
             transform: translateY(1px);
         }
 
+
+        #logout-button {
+            background-color: #7e7d7d; /* Red color */
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            box-shadow: 0 3px #999;
+        }
+
+        #logout-button:hover {
+            background-color: #8b8989;
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -99,6 +119,9 @@
         <button id="refresh-button" onclick="fetchStats()">Refresh Stats</button>
 
         <button id="reset-button" onclick="resetStats()">Reset Stats</button>
+
+        <button id="logout-button" onclick="logout()">Logout</button>
+
 
         <h2>API Endpoint Stats</h2>
         <table id="endpoint-stats">
@@ -220,6 +243,25 @@
                     }
                 }
             });
+        }
+
+        function logout() {
+            console.log('Logging out');
+            fetch("https://isa-fortune-teller-backend.onrender.com/auth/logout", {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Logout response: ', data);
+            })
+            .catch(error => {
+                console.error('Error logging out: ', error);
+            });
+            window.location.href = '/src/landing.html'
         }
     </script>
 </body>
