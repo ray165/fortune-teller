@@ -7,7 +7,7 @@ const cors = require('cors');
 const User = require('../models/user')
 
 const corsOptions = {
-    origin: true,
+    origin: '*',
     credentials: true
 }
 
