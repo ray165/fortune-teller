@@ -76,7 +76,12 @@
         // }
 
         function sendMessage() {
+
+            console.log('Send button clicked.');
+
             const userMessage = document.getElementById('user-message').value;
+
+            console.log('userMessage: ', userMessage);
 
             if (userMessage.trim() !== '') {
                 fetch("https://isa-fortune-teller-backend.onrender.com/api/question", {

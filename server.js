@@ -55,6 +55,7 @@ app.get('/chat', (req, res) => {
 })
 
 app.post('/api/v1/chat', (req, res) => {
+    res.send('Dummy response data from backend.');
     // ping the hugging face model.
     // send data back to chat to render the results
 })
