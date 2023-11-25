@@ -53,23 +53,24 @@ router.post('/question', async (req, res) => {
                 }
             }
     
-            const response = await axios.post(MODEL_URL, postData);
-    
-            // update endpoint count
-            await User.findOneAndUpdate(
-                { _id: user_id},
-                { 
-                    $inc: { 'stats.api/question.count': 1},
-                    $set: { 'stats.api/question.method': 'POST' }
-                },
-                { new: true}
-            );
-    
-            res.status(200).json({
-                message: response.data,
-                // message: 'Dummy data from server model call',
-                type: 'success',
-            })
+            await axios.post(MODEL_URL, postData)
+            .then((response) => {
+                res.status(200).json({
+                    message: response.data,
+                    // message: 'Dummy data from server model call',
+                    type: 'success',
+                })
+            }).then(async () => {
+                // update endpoint count
+                await User.findOneAndUpdate(
+                    { _id: user_id},
+                    { 
+                        $inc: { 'stats.api/question.count': 1},
+                        $set: { 'stats.api/question.method': 'POST' }
+                    },
+                    { new: true}
+                );
+            });
     
         } catch (err) {
             console.log("Error: calling model endpoint: ", err);
