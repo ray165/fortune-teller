@@ -114,7 +114,7 @@
             </tbody>
         </table>
 
-        <!-- <h2>API Usage Breakdown</h2>
+        <h2>API Usage Breakdown</h2>
         <table id="usage-breakdown">
             <thead>
                 <tr>
@@ -126,7 +126,7 @@
             </thead>
             <tbody>
             </tbody>
-        </table> -->
+        </table>
     </div>
 
     <script>
@@ -161,7 +161,7 @@
                 console.log('Data received:', data);
                 // Update the tables with the received data
                 updateTable('endpoint-stats', data);
-                // updateTable('usage-breakdown', data.usageBreakdown);
+                updateTable('usage-breakdown', data.usageBreakdown);
             })
             .catch(error => {
                 console.error('Error fetching stats:', error);
