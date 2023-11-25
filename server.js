@@ -20,6 +20,8 @@ const corsOptions = {
     credentials: true
 }
 
+// april is abusive
+
 mongoose
 	.connect(process.env.MONGO_URI, {
 		useNewUrlParser: true,
