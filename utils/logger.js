@@ -68,7 +68,7 @@ async function logUserUsage(req, res, next) {
     console.log('endpoint: ', endpoint);
     console.log('user: ', user);
 
-    let usernameLog = user.username;
+    let usernameLog = username;
     if (!usernameLog) {
         console.log("user is null")
         return res.status(401).json({ message });
