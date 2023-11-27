@@ -79,7 +79,7 @@ async function logUserUsage(req, res, next) {
             if (stat) {
                 stat.requestCount += 1;
             } else {
-                stat = new UserStats({ usernameLog, endpoint, method, requestCount: 1 });
+                stat = new UserStats({ user: usernameLog, endpoint, method, requestCount: 1 });
             }
       
             stat.save().then(() => {
