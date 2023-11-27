@@ -68,28 +68,31 @@ async function logUserUsage(req, res, next) {
     console.log('endpoint: ', endpoint);
     console.log('user: ', user);
 
-    let usernameLog = username;
-    if (!usernameLog) {
-        console.log("user is null")
+    if (!user) {
+        console.log("User is null")
         return res.status(401).json({ message });
-    }
-    UserStats.findOne({ usernameLog, endpoint, method }).then(stat => {
-        if (stat) {
-            stat.requestCount += 1;
-        } else {
-            stat = new UserStats({ usernameLog, endpoint, method, requestCount: 1 });
-        }
-  
-        stat.save().then(() => {
-            next();
+    } else {
+        console.log("Current user is not null.")
+        console.log("username to use: ", user.username)
+        let usernameLog = user.username;
+        UserStats.findOne({ usernameLog, endpoint, method }).then(stat => {
+            if (stat) {
+                stat.requestCount += 1;
+            } else {
+                stat = new UserStats({ usernameLog, endpoint, method, requestCount: 1 });
+            }
+      
+            stat.save().then(() => {
+                next();
+            }).catch(err => {
+                console.error(err);
+                next();
+            });
         }).catch(err => {
             console.error(err);
             next();
         });
-    }).catch(err => {
-        console.error(err);
-        next();
-    });
+    }
 }
 
 module.exports = {
