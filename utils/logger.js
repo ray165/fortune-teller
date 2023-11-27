@@ -50,6 +50,15 @@ async function logUserUsage(req, res, next) {
     const token = retrieveToken(req);
     const { username, password} = req.body;
     const { message, user } = await getUser(username, password, token);
+
+    console.log("Kris' debugging here.")
+
+    console.log('from line 50 - token: ', token);
+    console.log('from line 51 - username: ', username);
+    console.log('from line 51 - password: ', password);
+
+    console.log('from line 52 - message: ', message);
+    console.log('from line 52 - user: ', user);
     
     if (!endpointWhitelist.includes(endpoint)) { // Filter out endpoints that we don't want to track
         return next();
