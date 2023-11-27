@@ -77,8 +77,10 @@ async function logUserUsage(req, res, next) {
         let usernameLog = user.username;
         UserStats.findOne({  user: usernameLog, endpoint: endpoint, method: method } ).then(stat => {
             if (stat) {
+                console.log("stat found: ", stat)
                 stat.requestCount += 1;
             } else {
+                console.log("stat not found:")
                 stat = new UserStats({ user: usernameLog, endpoint, method, requestCount: 1 });
             }
       
