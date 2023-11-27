@@ -67,18 +67,21 @@ async function logUserUsage(req, res, next) {
     UserStats.findOne({ usernameLog, endpoint, method }).then(stat => {
         if (stat) {
             stat.requestCount += 1;
+            console.log('Existing stat found. Incrementing request count...');
         } else {
             stat = new UserStats({ usernameLog, endpoint, method, requestCount: 1 });
+            console.log('No existing stat found. Creating a new one...');
         }
   
         stat.save().then(() => {
+            console.log('Stat saved successfully.');
             next();
         }).catch(err => {
-            console.error(err);
+            console.error('Error saving stat:', err);
             next();
         });
     }).catch(err => {
-        console.error(err);
+        console.error('Error finding stat:', err);
         next();
     });
 }
