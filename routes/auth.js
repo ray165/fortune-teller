@@ -5,11 +5,13 @@ const { verify } = require('jsonwebtoken')
 const cors = require('cors');
 
 const User = require('../models/user')
+const { getUser } = require('../utils/user')
 
 const {
 	createAccessToken,
 	sendAccessToken,
     verifyAccessToken,
+    retrieveToken,
 	createPasswordResetToken,
 } = require('../utils/tokens')
 
@@ -130,7 +132,6 @@ router.post('/login', async (req, res) => {
             { new: true}
         );
 
-        // await validUser.save(); //Kris, what was the purpose of this line?
 		sendAccessToken(req, res, accessToken, validUser.role);
 
     } catch (err) {
@@ -143,32 +144,88 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', async (req, res) => {
-    const { token } = req.body;
-    const { validToken, user_id } = await verifyAccessToken(token);
+router.put('/update-email', async (req, res) => {
+    // delete all records in side of the api stats table of mongodb
+    try {
+        console.log("update endpoint called");
+        const token = retrieveToken(req);
+        const { username, password, currentEmail, newEmail} = req.body;
+        const { message, user } = await getUser(username, password, token);
+    
+        if (!user || user.email !== currentEmail) {
+            return res.status(401).json({ message });
+        }
 
-    if (!validToken){
-        return res.status(404).json({ message: "Unauthorized" });
+        // await User.findOneAndUpdate(
+        //     { username: user},
+        //     { 
+        //         $set: { 'email': newEmail },
+        //     },
+        //     { new: true}
+        // );
+
+        await user.updateOne({ email: newEmail });
+    }
+    catch (err) {
+        console.log('Error: ', err);
+        res.status(500).json({ 
+            message: "Error updating email!", 
+            type: "error",
+            err,
+        });
     }
 
-    // update endpoint count
-    await User.findOneAndUpdate(
-        { _id: user_id},
-        { 
-            $inc: { 'stats.auth/logout.count': 1},
-            $set: { 'stats.auth/logout.method': 'POST' }
-        },
-        { new: true}
-    );
-    
-    // send a httpOnly cookie that expired and is empty string
-    res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
-    res.status(200).json({ message: "Logout successful"});
+    res.status(200).json({ message: "Email updated successfully" });
 });
 
-router.post('/send-password-reset-email', async (req, res) => {
-    // TODO: To implement for bonus
+router.post('/logout', async (req, res) => {
+    // const cookies = req.headers.cookie;
+
+    // const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
+    //     const [key, value] = cookie.trim().split('=');
+    //     acc[key] = value;
+    //     return acc;
+    // }, {});
+
+    // const token = parsedCookies.token;
+
+    // const { validToken, user_id } = await verifyAccessToken(token);
+
+    // if (!validToken){
+    //     return res.status(404).json({ message: "Unauthorized" });
+    // }
+
+    // update endpoint count
+    // await User.findOneAndUpdate(
+    //     { _id: user_id},
+    //     { 
+    //         $inc: { 'stats.auth/logout.count': 1},
+    //         $set: { 'stats.auth/logout.method': 'POST' }
+    //     },
+    //     { new: true}
+    // );
+    
+    // send a httpOnly cookie that expired and is empty string
+    // res.writeHead(200, {
+	// 	'Set-Cookie': `token=“111”; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
+	// 	'Content-Type': 'application/json',
+	// })
+
+    res.clearCookie('token')
+
+    res.end(JSON.stringify({
+		"message": 'Sign out'
+	}));
+
+    
+
+    // res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
+    // res.status(200).json({ message: "Logout successful"});
 });
+
+// router.post('/send-password-reset-email', async (req, res) => {
+//     // TODO: To implement for bonus
+// });
 
 
 module.exports = router;

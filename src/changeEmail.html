@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Email</title>
+    <style>
+        /* The CSS is mostly the same as your login form, ensuring a consistent style */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h2>Change Email</h2>
+    <form id="changeEmailForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="currentEmail">Current Email:</label>
+        <input type="email" id="currentEmail" name="currentEmail" required>
+
+        <label for="newEmail">New Email:</label>
+        <input type="email" id="newEmail" name="newEmail" required>
+
+        <button type="button" onclick="changeEmail()">Change Email</button>
+    </form>
+
+    <footer>&copy; 2023 Deji</footer>
+
+    <script>
+        // Placeholder function for changing email
+        function changeEmail() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var currentEmail = document.getElementById('currentEmail').value;
+            var newEmail = document.getElementById('newEmail').value;
+
+            // Here you should add the actual logic to handle the email change request
+            // For example, making a POST request to your server with the form data
+            console.log('Change Email Request:', username, password, currentEmail, newEmail);
+            
+            // After request completion, you might want to provide feedback to the user
+            // alert('Email changed successfully');
+
+            fetch("https://isa-fortune-teller-backend.onrender.com/auth/update-email", {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: username, password: password, currentEmail: currentEmail, newEmail: newEmail }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                if (data.type === 'success') {
+                    if (data.role === 'admin') {
+                        window.location.href = '/src/landing.html';
+                    } else {
+                        window.location.href = '/src/landing.html';
+                    }
+                } else {
+                    alert('Login failed. Please check your credentials.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

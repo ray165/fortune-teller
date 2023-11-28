@@ -1,5 +1,4 @@
 require('dotenv').config();
-const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const {logUsage, logUserUsage} = require('./utils/logger');
@@ -22,8 +21,6 @@ const corsOptions = {
     allowedHeaders: "Content-Type,Authorization"
 }
 
-// april is abusive
-
 mongoose
 	.connect(process.env.MONGO_URI, {
 		useNewUrlParser: true,
@@ -42,40 +39,6 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/stats', statsRouter);
 app.use('/api', apiRouter);
-
-// Implement routes for admin and user dashboards similarly
-
-// Admin dashboard
-app.get('/admin_dashboard', (req, res) => {
-    res.send('Welcome to Admin Dashboard');
-});
-
-// User dashboard
-app.get('/user_dashboard', (req, res) => {
-    res.send('Welcome to User Dashboard');
-});
-
-app.get('/chat', (req, res) => {
-    res.sendFile(__dirname + '/src/chat.html');
-})
-
-app.post('/api/v1/chat', (req, res) => {
-    res.send('Dummy response data from backend.');
-    // ping the hugging face model.
-    // send data back to chat to render the results
-})
-
-app.get('/loginpage',function (req, res) {
-    res.sendFile(__dirname + '/src/login.html');
-});
-
-app.get('/signuppage',function (req, res) {
-    res.sendFile(__dirname + '/src/signup.html');
-});
-
-app.get('*',function (req, res) {
-    res.redirect('/');
-});
 
 // Start the server
 app.listen(port, () => {

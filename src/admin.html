@@ -142,8 +142,8 @@
             <thead>
                 <tr>
                     <th>User Name</th>
-                    <th>Email</th>
-                    <th>Token</th>
+                    <th>API Endpoint</th>
+                    <th>Method</th>
                     <th>Total # Requests</th>
                 </tr>
             </thead>
@@ -207,8 +207,8 @@
         function resetStats() {
             console.log('Stats reset!');
             // reset-count
-            fetch("https://isa-fortune-teller-backend.onrender.com/stats/reset-count", {
-                method: 'PUT',
+            fetch("https://isa-fortune-teller-backend.onrender.com/stats/reset", {
+                method: 'DELETE',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
@@ -216,7 +216,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Data received:', data);
+                console.log('Server Response:', data);
                 fetchStats();  // not sure if nested Fetch requests will work?
             })
             .catch(error => {
@@ -260,8 +260,10 @@
             })
             .catch(error => {
                 console.error('Error logging out: ', error);
+            })
+            .finally(() => {
+                window.location.href = '/src/landing.html';
             });
-            window.location.href = '/src/landing.html'
         }
     </script>
 </body>

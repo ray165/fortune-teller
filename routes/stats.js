@@ -81,18 +81,6 @@ router.delete('/delete-stats', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-  
-// PUT request to update all "requestCount" fields to 0
-router.put('/reset-count', async (req, res) => {
-    try {
-        // Update all records to set "requestCount" to 0
-        await Stats.updateMany({}, { $set: { requestCount: 0 } });
-        res.status(200).json({ message: 'All request counts reset to 0 successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
 
 // Routes for user login: allow multiple John as username, match password with all Johns
 router.post('/myUser', async (req, res) => {
@@ -119,15 +107,28 @@ router.post('/myUser', async (req, res) => {
     }
 });
 
-
-router.get('/update', async (req, res) => {
-    res.send('something');
-});
-
 router.delete('/reset', async (req, res) => {
     // delete all records in side of the api stats table of mongodb
+    console.log("reset endpoint called");
+    const token = retrieveToken(req);
+    const { username, password} = req.body;
+    const { message, user } = await getUser(username, password, token);
+
+    if (!user) {
+        return res.status(401).json({ message });
+    }
 
     // then run the update endpoint. Which will return nothing. frontend should get  [] and parse nothing. 
+    try {
+        // Delete all records from the Stats collection
+        await Stats.deleteMany({});
+        await UserStats.deleteMany({});
+        res.status(200).json({ message: 'All request counts reset to 0' });
+    }
+    catch (err) {
+        res.status(500).json({ error: `Internal Server Error ${err}` });
+    }
+    
 })
 
 module.exports = router;

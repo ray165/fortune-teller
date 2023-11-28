@@ -74,7 +74,7 @@ router.post('/question', async (req, res) => {
 
             res.status(500).json({
                 type: 'error',
-                message: 'Error creating user!',
+                message: 'Error calling the model endpoint /question!',
                 error: err,
             })
         }

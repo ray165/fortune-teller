@@ -50,6 +50,15 @@ async function logUserUsage(req, res, next) {
     const token = retrieveToken(req);
     const { username, password} = req.body;
     const { message, user } = await getUser(username, password, token);
+
+    console.log("Kris' debugging here.")
+
+    console.log('from line 50 - token: ', token);
+    console.log('from line 51 - username: ', username);
+    console.log('from line 51 - password: ', password);
+
+    console.log('from line 52 - message: ', message);
+    console.log('from line 52 - user: ', user);
     
     if (!endpointWhitelist.includes(endpoint)) { // Filter out endpoints that we don't want to track
         return next();
@@ -59,31 +68,33 @@ async function logUserUsage(req, res, next) {
     console.log('endpoint: ', endpoint);
     console.log('user: ', user);
 
-    let usernameLog = user.username;
-    if (!usernameLog) {
-        console.log("user is null")
+    if (!user) {
+        console.log("User is null")
         return res.status(401).json({ message });
-    }
-    UserStats.findOne({ usernameLog, endpoint, method }).then(stat => {
-        if (stat) {
-            stat.requestCount += 1;
-            console.log('Existing stat found. Incrementing request count...');
-        } else {
-            stat = new UserStats({ usernameLog, endpoint, method, requestCount: 1 });
-            console.log('No existing stat found. Creating a new one...');
-        }
-  
-        stat.save().then(() => {
-            console.log('Stat saved successfully.');
-            next();
+    } else {
+        console.log("Current user is not null.")
+        console.log("username to use: ", user.username)
+        let usernameLog = user.username;
+        UserStats.findOne({ user: usernameLog, endpoint, method }).then(stat => {
+            if (stat) {
+                console.log("Stat found: ", stat);
+                stat.requestCount += 1;
+            } else {
+                console.log("Stat not found. Creating new data entry...");
+                stat = new UserStats({ user: usernameLog, endpoint, method, requestCount: 1 });
+            }
+      
+            stat.save().then(() => {
+                next();
+            }).catch(err => {
+                console.error(err);
+                next();
+            });
         }).catch(err => {
-            console.error('Error saving stat:', err);
+            console.error(err);
             next();
         });
-    }).catch(err => {
-        console.error('Error finding stat:', err);
-        next();
-    });
+    }
 }
 
 module.exports = {
