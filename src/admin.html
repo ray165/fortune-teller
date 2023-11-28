@@ -207,8 +207,8 @@
         function resetStats() {
             console.log('Stats reset!');
             // reset-count
-            fetch("https://isa-fortune-teller-backend.onrender.com/stats/reset-count", {
-                method: 'PUT',
+            fetch("https://isa-fortune-teller-backend.onrender.com/stats/reset", {
+                method: 'DELETE',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
@@ -216,7 +216,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Data received:', data);
+                console.log('Server Response:', data);
                 fetchStats();  // not sure if nested Fetch requests will work?
             })
             .catch(error => {
