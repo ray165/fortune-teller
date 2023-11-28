@@ -128,17 +128,16 @@ router.delete('/reset', async (req, res) => {
     // delete all records in side of the api stats table of mongodb
     console.log("reset endpoint called");
     // then run the update endpoint. Which will return nothing. frontend should get  [] and parse nothing. 
-    Stats.deleteMany({}, function(err) { 
-        console.log('collection removed') 
-    }).then(
-        UserStats.deleteMany({}, function(err) { 
-            console.log('collection removed') 
-        })
-    ).then(
-        res.status(200).json({ message: 'All request counts reset to 0 successfully' })
-    );
+    try {
+        // Delete all records from the Stats collection
+        await Stats.deleteMany({});
+        await UserStats.deleteMany({});
+        res.status(200).json({ message: 'All request counts reset to 0' });
+    }
+    catch (err) {
+        res.status(500).json({ error: `Internal Server Error ${err}` });
+    }
     
-
 })
 
 module.exports = router;
