@@ -40,22 +40,6 @@ app.use('/auth', authRouter);
 app.use('/stats', statsRouter);
 app.use('/api', apiRouter);
 
-app.get('/chat', (req, res) => {
-    res.sendFile(__dirname + '/src/chat.html');
-})
-
-app.get('/loginpage',function (req, res) {
-    res.sendFile(__dirname + '/src/login.html');
-});
-
-app.get('/signuppage',function (req, res) {
-    res.sendFile(__dirname + '/src/signup.html');
-});
-
-app.get('*',function (req, res) {
-    res.redirect('/');
-});
-
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
