@@ -130,7 +130,6 @@ router.post('/login', async (req, res) => {
             { new: true}
         );
 
-        // await validUser.save(); //Kris, what was the purpose of this line?
 		sendAccessToken(req, res, accessToken, validUser.role);
 
     } catch (err) {
@@ -144,7 +143,16 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-    const { token } = req.body;
+    const cookies = req.headers.cookie;
+    
+    const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        acc[key] = value;
+        return acc;
+    }, {});
+
+    const token = parsedCookies.token;
+
     const { validToken, user_id } = await verifyAccessToken(token);
 
     if (!validToken){
