@@ -81,18 +81,6 @@ router.delete('/delete-stats', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-  
-// PUT request to update all "requestCount" fields to 0
-router.put('/reset-count', async (req, res) => {
-    try {
-        // Update all records to set "requestCount" to 0
-        await Stats.updateMany({}, { $set: { requestCount: 0 } });
-        res.status(200).json({ message: 'All request counts reset to 0 successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
 
 // Routes for user login: allow multiple John as username, match password with all Johns
 router.post('/myUser', async (req, res) => {
