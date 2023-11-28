@@ -260,8 +260,10 @@
             })
             .catch(error => {
                 console.error('Error logging out: ', error);
+            })
+            .finally(() => {
+                window.location.href = '/src/landing.html';
             });
-            window.location.href = '/src/landing.html'
         }
     </script>
 </body>
