@@ -127,6 +127,14 @@ router.get('/update', async (req, res) => {
 router.delete('/reset', async (req, res) => {
     // delete all records in side of the api stats table of mongodb
     console.log("reset endpoint called");
+    const token = retrieveToken(req);
+    const { username, password} = req.body;
+    const { message, user } = await getUser(username, password, token);
+
+    if (!user) {
+        return res.status(401).json({ message });
+    }
+
     // then run the update endpoint. Which will return nothing. frontend should get  [] and parse nothing. 
     try {
         // Delete all records from the Stats collection
