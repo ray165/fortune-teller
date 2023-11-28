@@ -11,6 +11,7 @@ const {
 	createAccessToken,
 	sendAccessToken,
     verifyAccessToken,
+    retrieveToken,
 	createPasswordResetToken,
 } = require('../utils/tokens')
 
