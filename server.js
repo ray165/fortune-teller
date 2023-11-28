@@ -59,11 +59,11 @@ app.get('/chat', (req, res) => {
     res.sendFile(__dirname + '/src/chat.html');
 })
 
-app.post('/api/v1/chat', (req, res) => {
-    res.send('Dummy response data from backend.');
-    // ping the hugging face model.
-    // send data back to chat to render the results
-})
+// app.post('/api/v1/chat', (req, res) => {
+//     res.send('Dummy response data from backend.');
+//     // ping the hugging face model.
+//     // send data back to chat to render the results
+// })
 
 app.get('/loginpage',function (req, res) {
     res.sendFile(__dirname + '/src/login.html');
