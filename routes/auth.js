@@ -179,31 +179,31 @@ router.put('/update-email', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-    const cookies = req.headers.cookie;
+    // const cookies = req.headers.cookie;
 
-    const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
-        const [key, value] = cookie.trim().split('=');
-        acc[key] = value;
-        return acc;
-    }, {});
+    // const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
+    //     const [key, value] = cookie.trim().split('=');
+    //     acc[key] = value;
+    //     return acc;
+    // }, {});
 
-    const token = parsedCookies.token;
+    // const token = parsedCookies.token;
 
-    const { validToken, user_id } = await verifyAccessToken(token);
+    // const { validToken, user_id } = await verifyAccessToken(token);
 
-    if (!validToken){
-        return res.status(404).json({ message: "Unauthorized" });
-    }
+    // if (!validToken){
+    //     return res.status(404).json({ message: "Unauthorized" });
+    // }
 
     // update endpoint count
-    await User.findOneAndUpdate(
-        { _id: user_id},
-        { 
-            $inc: { 'stats.auth/logout.count': 1},
-            $set: { 'stats.auth/logout.method': 'POST' }
-        },
-        { new: true}
-    );
+    // await User.findOneAndUpdate(
+    //     { _id: user_id},
+    //     { 
+    //         $inc: { 'stats.auth/logout.count': 1},
+    //         $set: { 'stats.auth/logout.method': 'POST' }
+    //     },
+    //     { new: true}
+    // );
     
     // send a httpOnly cookie that expired and is empty string
     // res.writeHead(200, {
