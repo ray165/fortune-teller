@@ -5,6 +5,7 @@ const { verify } = require('jsonwebtoken')
 const cors = require('cors');
 
 const User = require('../models/user')
+const { getUser } = require('../utils/user')
 
 const {
 	createAccessToken,
@@ -140,6 +141,40 @@ router.post('/login', async (req, res) => {
             err,
         });
     }
+});
+
+router.put('/update-email', async (req, res) => {
+    // delete all records in side of the api stats table of mongodb
+    try {
+        console.log("update endpoint called");
+        const token = retrieveToken(req);
+        const { username, password, currentEmail, newEmail} = req.body;
+        const { message, user } = await getUser(username, password, token);
+    
+        if (!user || user.email !== currentEmail) {
+            return res.status(401).json({ message });
+        }
+
+        // await User.findOneAndUpdate(
+        //     { username: user},
+        //     { 
+        //         $set: { 'email': newEmail },
+        //     },
+        //     { new: true}
+        // );
+
+        await user.updateOne({ email: newEmail });
+    }
+    catch (err) {
+        console.log('Error: ', err);
+        res.status(500).json({ 
+            message: "Error updating email!", 
+            type: "error",
+            err,
+        });
+    }
+
+    res.status(200).json({ message: "Email updated successfully" });
 });
 
 router.post('/logout', async (req, res) => {
