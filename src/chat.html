@@ -72,6 +72,16 @@
             background-color: #8b8989; 
         }
 
+        .chatbot-message-style {
+            background-color: #4CAF50; /* User message color */
+            color: white;
+        }
+
+        .user-message-style {
+            background-color: #8b8989; /* Chatbot message color */
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -103,6 +113,8 @@
             console.log('userMessage: ', userMessage);
 
             if (userMessage.trim() !== '') {
+                appendMessage('user', userMessage);
+
                 fetch("https://isa-fortune-teller-backend.onrender.com/api/question", {
                     method: 'POST',
                     credentials: 'include',
@@ -139,7 +151,7 @@
         function appendMessage(sender, message) {
             const chatMessages = document.getElementById('chat-messages');
             const messageElement = document.createElement('div');
-            messageElement.className = sender === 'user' ? 'user-message' : 'chatbot-message';
+            messageElement.className = sender === 'user' ? 'user-message-style' : 'chatbot-message-style';
             messageElement.innerText = `${sender === 'user' ? 'You' : 'Spiritual Mentor'}: ${message}`;
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
