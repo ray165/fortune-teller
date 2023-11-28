@@ -144,7 +144,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     const cookies = req.headers.cookie;
-    
+
     const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
         const [key, value] = cookie.trim().split('=');
         acc[key] = value;
@@ -170,13 +170,22 @@ router.post('/logout', async (req, res) => {
     );
     
     // send a httpOnly cookie that expired and is empty string
-    res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
-    res.status(200).json({ message: "Logout successful"});
+    res.writeHead(200, {
+		'Set-Cookie': `token=“111”; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
+		'Content-Type': 'application/json',
+	})
+
+    res.end(JSON.stringify({
+		"message": 'Sign out'
+	}));
+
+    // res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
+    // res.status(200).json({ message: "Logout successful"});
 });
 
-router.post('/send-password-reset-email', async (req, res) => {
-    // TODO: To implement for bonus
-});
+// router.post('/send-password-reset-email', async (req, res) => {
+//     // TODO: To implement for bonus
+// });
 
 
 module.exports = router;
