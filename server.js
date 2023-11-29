@@ -21,15 +21,6 @@ const corsOptions = {
     allowedHeaders: "Content-Type,Authorization"
 }
 
-mongoose
-	.connect(process.env.MONGO_URI, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
-	.then(() => {
-		console.log('MongoDB connection is established successfully! 🎉')
-	})
-
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -40,6 +31,16 @@ app.use('/auth', authRouter);
 app.use('/stats', statsRouter);
 app.use('/api', apiRouter);
 
+mongoose
+	.connect(process.env.MONGO_URI, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log('MongoDB connection is established successfully! 🎉')
+	})
+
+	
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
