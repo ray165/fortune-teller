@@ -128,7 +128,8 @@
                     console.log(data);
 
                     setTimeout(() => {
-                        let message = data["message"][0].generated_text
+                        // let message = data["message"][0].generated_text;
+                        let message = data[0]["generated_text"];
                         appendMessage('chatbot', message);
                     }, 5000);
                     document.getElementById('user-message').value = ''; // Clear input field
