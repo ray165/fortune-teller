@@ -205,6 +205,7 @@ router.post('/logout', async (req, res) => {
 	// })
 
     res.clearCookie('token')
+    res.setHeader('Content-Type', 'application/json');
 
     res.end(JSON.stringify({
 		"message": 'Sign out'
