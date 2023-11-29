@@ -155,16 +155,11 @@ router.put('/update-email', async (req, res) => {
         if (!user || user.email !== currentEmail) {
             return res.status(401).json({ message });
         }
-
-        // await User.findOneAndUpdate(
-        //     { username: user},
-        //     { 
-        //         $set: { 'email': newEmail },
-        //     },
-        //     { new: true}
-        // );
-
         await user.updateOne({ email: newEmail });
+        res.status(200).json({
+            message: 'Email updated successfully! 🥳',
+            type: 'success',
+        })
     }
     catch (err) {
         console.log('Error: ', err);
@@ -174,8 +169,6 @@ router.put('/update-email', async (req, res) => {
             err,
         });
     }
-
-    res.status(200).json({ message: "Email updated successfully" });
 });
 
 router.post('/logout', async (req, res) => {

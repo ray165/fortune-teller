@@ -120,11 +120,12 @@
                         window.location.href = '/src/landing.html';
                     }
                 } else {
-                    alert('Login failed. Please check your credentials.');
+                    alert('Error changing email: ' + data.message);
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
+                alert('Error changing email: ' + error);
             });
         }
     </script>
