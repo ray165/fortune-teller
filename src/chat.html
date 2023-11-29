@@ -102,13 +102,6 @@
     </div>
 
     <script>
-        // let url = ""
-        // if (process.env.NODE_ENV == 'DEVELOPMENT') {
-        //     url = 'http://localhost:3000/api/question'
-        // } else {
-        //     url = process.env.RENDER_URI + "api/question"
-        // }
-
         function sendMessage() {
 
             console.log('Send button clicked.');
@@ -142,17 +135,6 @@
                 })
                 .catch(error => console.error('ERROR: ', error));
             }
-
-
-            // if (userMessage.trim() !== '') {
-            //     appendMessage('user', userMessage);
-            //     // Implement logic to send user message to server and get ChatGPT's response
-            //     // For simplicity, just a dummy response is shown here
-            //     setTimeout(() => {
-            //         appendMessage('chatbot', 'This is a dummy response from ChatGPT.');
-            //     }, 500);
-            //     document.getElementById('user-message').value = ''; // Clear input field
-            // }
         }
 
         function appendMessage(sender, message) {
