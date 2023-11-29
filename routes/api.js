@@ -40,9 +40,11 @@ router.post('/question', async (req, res) => {
                 parameters: {
                     repetition_penalty: 4.0,
                     max_time: 60,
-                    max_new_tokens: 100,
+                    max_new_tokens: 300,
                     use_cache: false,
-                    temperature: 0.8
+                    temperature: 0.8,
+                    return_full_text: false,
+                    num_return_sequences: 1
                 }
             }
 
@@ -54,7 +56,6 @@ router.post('/question', async (req, res) => {
                 .then((response) => {
                     res.status(200).json({
                         message: response.data,
-                        // message: 'Dummy data from server model call',
                         type: 'success',
                     })
                 }).then(async () => {
