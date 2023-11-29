@@ -257,13 +257,14 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Logout response: ', data);
+                window.location.href = '/src/landing.html';
             })
             .catch(error => {
                 console.error('Error logging out: ', error);
             })
-            .finally(() => {
-                window.location.href = '/src/landing.html';
-            });
+            // .finally(() => {
+            //     window.location.href = '/src/landing.html';
+            // });
         }
     </script>
 </body>
