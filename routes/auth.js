@@ -199,13 +199,13 @@ router.post('/logout', async (req, res) => {
     // );
     
     // send a httpOnly cookie that expired and is empty string
-    // res.writeHead(200, {
-	// 	'Set-Cookie': `token=“111”; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
-	// 	'Content-Type': 'application/json',
-	// })
+    res.writeHead(200, {
+		'Set-Cookie': `token=“111”; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/`,
+		'Content-Type': 'application/json',
+	})
 
-    res.clearCookie('token')
-    res.setHeader('Content-Type', 'application/json');
+    // res.clearCookie('token')
+    // res.setHeader('Content-Type', 'application/json');
 
     res.end(JSON.stringify({
 		"message": 'Sign out'
