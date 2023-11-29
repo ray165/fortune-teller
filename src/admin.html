@@ -248,7 +248,7 @@
         function logout() {
             console.log('Logging out');
             fetch("https://isa-fortune-teller-backend.onrender.com/auth/logout", {
-                method: 'PUT',
+                method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
