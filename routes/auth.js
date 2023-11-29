@@ -172,54 +172,42 @@ router.put('/update-email', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-    // const cookies = req.headers.cookie;
+    const cookies = req.headers.cookie;
 
-    // const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
-    //     const [key, value] = cookie.trim().split('=');
-    //     acc[key] = value;
-    //     return acc;
-    // }, {});
+    const parsedCookies = cookies.split(';').reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        acc[key] = value;
+        return acc;
+    }, {});
 
-    // const token = parsedCookies.token;
+    const token = parsedCookies.token;
 
-    // const { validToken, user_id } = await verifyAccessToken(token);
+    const { validToken, user_id } = await verifyAccessToken(token);
 
-    // if (!validToken){
-    //     return res.status(404).json({ message: "Unauthorized" });
-    // }
+    if (!validToken){
+        return res.status(404).json({ message: "Unauthorized" });
+    }
 
     // update endpoint count
-    // await User.findOneAndUpdate(
-    //     { _id: user_id},
-    //     { 
-    //         $inc: { 'stats.auth/logout.count': 1},
-    //         $set: { 'stats.auth/logout.method': 'POST' }
-    //     },
-    //     { new: true}
-    // );
+    await User.findOneAndUpdate(
+        { _id: user_id},
+        { 
+            $inc: { 'stats.auth/logout.count': 1},
+            $set: { 'stats.auth/logout.method': 'POST' }
+        },
+        { new: true}
+    );
     
-    // send a httpOnly cookie that expired and is empty string
+    // send a httpOnly cookie that expired with dummy token value
     res.writeHead(200, {
         'Set-Cookie': 'token=111; HttpOnly; SameSite=None; Secure; Max-Age=3600; Path=/',
         'Content-Type': 'application/json',
     });
 
-    // res.clearCookie('token')
-    // res.setHeader('Content-Type', 'application/json');
-
     res.end(JSON.stringify({
 		"message": 'Sign out'
 	}));
-
-    
-
-    // res.cookie('token', '', { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true, path: '/' });
-    // res.status(200).json({ message: "Logout successful"});
 });
-
-// router.post('/send-password-reset-email', async (req, res) => {
-//     // TODO: To implement for bonus
-// });
 
 
 module.exports = router;
