@@ -73,13 +73,18 @@
         }
 
         .chatbot-message-style {
-            background-color: #824c71; /* User message color */
-            color: white;
+            background-color: #FDF0D5; /* User message color */
+            color: darkolivegreen;
         }
 
         .user-message-style {
             background-color: #F4D6CC; /* Chatbot message color */
             color: black;
+        }
+
+        .sender-highlight-style {
+            font-weight: bold;
+            font-size: 1.2em; /* Adjust the font size as needed */
         }
 
     </style>
@@ -114,6 +119,8 @@
 
             if (userMessage.trim() !== '') {
                 appendMessage('user', userMessage);
+                // appendMessage('chatbot', "A calico cat is a domestic cat of any breed with a tri-color coat. The calico cat is most commonly thought of as being 25% to 75% white with large orange and black patches; however, they may have other colors in their patterns. Calicoes are almost exclusively female except under rare genetic conditions");
+                // document.getElementById('user-message').value = ''; // Clear input field
 
                 fetch("https://isa-fortune-teller-backend.onrender.com/api/question", {
                     method: 'POST',
@@ -152,7 +159,7 @@
             const chatMessages = document.getElementById('chat-messages');
             const messageElement = document.createElement('div');
             messageElement.className = sender === 'user' ? 'user-message-style' : 'chatbot-message-style';
-            messageElement.innerText = `${sender === 'user' ? 'You' : 'Spiritual Mentor'}: ${message}`;
+            messageElement.innerHTML = `${sender === 'user' ? '<span class="sender-highlight-style">You</span>' : '<span class="sender-highlight-style">Spiritual Mentor</span>'}:<br /> ${message}`;
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
         }
